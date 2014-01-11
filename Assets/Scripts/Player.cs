@@ -3,21 +3,24 @@ using System;
 using System.Collections;
 public class Player : MonoBehaviour
 {
-	private int MovementSpeed = 30;
+	private int MovementSpeed = 150;
 	private GameObject	SpawnPoint1;
-	private GameObject Projectile;
+	public GameObject Projectile;
 	private GameObject Model;
 	private int HealthPointsCurrent = 100;
 	private int ArmorPointsCurrent = 0;
 	private Texture2D WalkAnimation;
+	private Camera PlayerCamera;
 	void Awake ()
 	{
 		WalkAnimation = Resources.Load("WalkAnimation") as Texture2D;
 
-		Projectile 	= Resources.Load		("Projectile") as GameObject;
+		//Projectile 	= Resources.Load("Bullet") as GameObject;
 
 		SpawnPoint1 = transform.FindChild	("Model/Spawnpoint1").gameObject;
 		Model 		= transform.FindChild	("Model").		gameObject;
+
+		PlayerCamera = transform.FindChild("Camera").camera;
 	}
 	void Update ()
 	{
@@ -37,11 +40,18 @@ public class Player : MonoBehaviour
 			}
 		}
 		FitModelToPixel();
+		FitCameraToPixel();
 	}
 	void FitModelToPixel ()
 	{
 		Model.transform.position = new Vector3(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), Mathf.RoundToInt(transform.position.z));
 	}
+
+	void FitCameraToPixel ()
+	{
+		PlayerCamera.transform.position = new Vector3(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), PlayerCamera.transform.position.z);
+	}
+
 	bool CheckIfAlive()
 	{
 		if (HealthPointsCurrent > 0)
@@ -109,7 +119,7 @@ public class Player : MonoBehaviour
 			if (!Walking)
 			{
 				Walking = true;
-				StartCoroutine(AnimateWalk());
+				//StartCoroutine(AnimateWalk());
 			}
 			if (MovementDirection.y == 0)
 			{
@@ -127,7 +137,7 @@ public class Player : MonoBehaviour
 				if (!Walking)
 				{
 					Walking = true;
-					StartCoroutine(AnimateWalk());
+					//StartCoroutine(AnimateWalk());
 				}
 				transform.Translate(new Vector3(0, MovementDirection.y * Time.deltaTime, 0));
 			}
