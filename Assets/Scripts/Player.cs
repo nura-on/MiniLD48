@@ -38,6 +38,10 @@ public class Player : MonoBehaviour
 			{
 				Instantiate(Projectile, SpawnPoint1.transform.position, SpawnPoint1.transform.rotation);
 			}
+			if (Input.GetKeyDown(KeyCode.F))
+			{
+				Instantiate(Resources.Load("Bomb") as GameObject, SpawnPoint1.transform.position, SpawnPoint1.transform.rotation);
+			}
 		}
 		FitModelToPixel();
 		FitCameraToPixel();
