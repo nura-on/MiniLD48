@@ -1,18 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 public class Platform : MonoBehaviour
 {
-
-	// Use this for initialization
-	void Start ()
+	public enum PlatformType {Empty, Type1, Type2}
+	public PlatformType CurrentPlatformType = PlatformType.Empty;
+	public void ChangeMyType(PlatformType ChangePlatformType)
 	{
-	
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+		CurrentPlatformType = ChangePlatformType;
 	}
 }
