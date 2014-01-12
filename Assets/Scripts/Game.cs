@@ -14,8 +14,23 @@ public class Game : MonoBehaviour
 	private GameObject[,] WinPatternBlocks;
 	private GameObject WinPatternPositionBlinker;
 
-	private int CurrentWave = 0;
+    private int currentWave = 0;
 
+    public int CurrentWave
+    {
+        get { return currentWave; }
+        set { currentWave = value; }
+    }
+
+    private Game() { }
+    private static Game _singleton;
+    public static Game Instance {
+        get { return (_singleton == null ? new Game() : _singleton); }
+    }
+
+    void Awake () {
+        _singleton = this;
+    }
 	void Start ()
 	{
 		DontDestroyOnLoad(gameObject);
@@ -107,7 +122,7 @@ public class Game : MonoBehaviour
 		WinPattern.SetActive(State);
 		WinPatternPositionBlinker.transform.position = new Vector3(WinPatternBlocks[xPos, yPos].transform.position.x, WinPatternBlocks[xPos, yPos].transform.position.y, WinPatternBlocks[xPos, yPos].transform.position.z - 0.1f);
 	}
-	public void CheckIfWinPatternIsReached ()
+	public bool CheckIfWinPatternIsReached ()
 	{
 		for (int i = 0; i < PlatformRows; i++)
 		{
@@ -115,15 +130,14 @@ public class Game : MonoBehaviour
 			{
 				if (WinPatternTypes[i, j] != PlatformFields[i, j].CurrentPlatformType)
 				{
-					return;
+                    return false;
 				}
-				if (i == PlatformRows - 1 && j == PlatformColumns - 1)
+				else if (i == PlatformRows - 1 && j == PlatformColumns - 1)
 				{
-					Debug.Log("PatternMatch!!!");
-					Application.LoadLevel(1);
-					CurrentWave++;
+                    return true;
 				}
 			}
 		}
+        return false;
 	}
 }

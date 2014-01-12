@@ -4,6 +4,12 @@ using System.Collections;
 public class Bullet : MonoBehaviour 
 {
 
+    GameObject blood;
+
+    void Awake() {
+        blood = Resources.Load("Blood") as GameObject;
+    }
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -21,8 +27,8 @@ public class Bullet : MonoBehaviour
 	{
 		if (col.tag == "Enemy")
 		{
-			Destroy(gameObject);
-			Instantiate(Resources.Load("Blood") as GameObject, transform.position, Quaternion.identity);
+			Instantiate(blood, transform.position, Quaternion.identity);
+            Destroy(gameObject);
 		}
 	}
 }

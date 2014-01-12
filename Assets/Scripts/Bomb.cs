@@ -3,6 +3,14 @@ using System.Collections;
 
 public class Bomb : MonoBehaviour {
 
+
+    GameObject explo, crater;
+
+    void Awake() {
+        crater = Resources.Load("Crater") as GameObject;
+        explo = Resources.Load("Explosion") as GameObject;
+    }
+
 	void Start ()
 	{
 		Destroy(gameObject, 2f);
@@ -20,8 +28,8 @@ public class Bomb : MonoBehaviour {
 		if (col.tag == "Enemy")
 		{
 			Destroy(gameObject);
-			Instantiate(Resources.Load("Explosion") as GameObject, transform.position, Quaternion.identity);
-			Instantiate(Resources.Load("Crater") as GameObject, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
+            Instantiate(explo, transform.position, Quaternion.identity);
+            Instantiate(crater, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
 		}
 	}
 }

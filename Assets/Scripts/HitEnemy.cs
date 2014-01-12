@@ -4,13 +4,14 @@ public class HitEnemy : MonoBehaviour
 {
 	public float WaitForFrameTime = 0.1f;
 	public float TileWidth = 16;
+    Transform Model;
 	void Start ()
 	{
 		StartCoroutine(AnimateEffect());
 	}
 	IEnumerator AnimateEffect ()
 	{
-		GameObject Model = transform.FindChild("Model").gameObject;
+        Model = transform.FindChild("Model");
 		int Counter1 = 0;
 		while(Counter1 < (Model.renderer.material.mainTexture.width / TileWidth) - 1)
 		{
@@ -19,5 +20,6 @@ public class HitEnemy : MonoBehaviour
 			yield return new WaitForSeconds(WaitForFrameTime);
 		}
 		Destroy(gameObject);
+        //gameObject.SetActive(false);
 	}
 }

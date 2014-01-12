@@ -9,5 +9,8 @@ public class StartGame : MonoBehaviour
 		{
 			Application.LoadLevel(1);
 		}
+
+        // TODO press any key
+        // TODO title screen
 	}
 }

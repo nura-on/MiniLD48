@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
 	private int MovementSpeed = 150;
 	private GameObject	SpawnPoint1;
-	public GameObject Projectile;
+	public GameObject Projectile, bomb;
 	private GameObject Model;
 	private int HealthPointsCurrent = 100;
 	private int ArmorPointsCurrent = 0;
@@ -17,10 +17,10 @@ public class Player : MonoBehaviour
 
 		//Projectile 	= Resources.Load("Bullet") as GameObject;
 
-		SpawnPoint1 = transform.FindChild	("Model/Spawnpoint1").gameObject;
-		Model 		= transform.FindChild	("Model").		gameObject;
-
-		PlayerCamera = transform.FindChild("Camera").camera;
+        bomb = Resources.Load("Bomb") as GameObject;
+        Model = transform.FindChild("Model").gameObject;
+        SpawnPoint1 = Model.transform.FindChild("Spawnpoint1").gameObject;
+		PlayerCamera = Camera.main;
 	}
 	void Update ()
 	{
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
 			}
 			if (Input.GetKeyDown(KeyCode.F))
 			{
-				Instantiate(Resources.Load("Bomb") as GameObject, SpawnPoint1.transform.position, SpawnPoint1.transform.rotation);
+				Instantiate(bomb, SpawnPoint1.transform.position, SpawnPoint1.transform.rotation);
 			}
 		}
 		FitModelToPixel();
