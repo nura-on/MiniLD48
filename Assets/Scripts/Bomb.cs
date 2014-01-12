@@ -17,7 +17,7 @@ public class Bomb : MonoBehaviour {
 	
 	void OnTriggerEnter2D (Collider2D col)
 	{
-		if (col.name == "Statue_Gargoyle")
+		if (col.tag == "Enemy")
 		{
 			Destroy(gameObject);
 			Instantiate(Resources.Load("Explosion") as GameObject, transform.position, Quaternion.identity);

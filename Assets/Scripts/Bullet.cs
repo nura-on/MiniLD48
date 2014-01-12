@@ -19,7 +19,7 @@ public class Bullet : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D col)
 	{
-		if (col.name == "Statue_Gargoyle")
+		if (col.tag == "Enemy")
 		{
 			Destroy(gameObject);
 			Instantiate(Resources.Load("Blood") as GameObject, transform.position, Quaternion.identity);
