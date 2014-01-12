@@ -3,9 +3,9 @@ using System;
 using System.Collections;
 public class Player : MonoBehaviour
 {
-	private int MovementSpeed = 150;
+	public int MovementSpeed = 150;
 	private GameObject	SpawnPoint1;
-	public GameObject Projectile, bomb;
+	private GameObject Projectile, bomb;
 	private GameObject Model;
 	private int HealthPointsCurrent = 100;
 	private int ArmorPointsCurrent = 0;
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 	{
 		WalkAnimation = Resources.Load("WalkAnimation") as Texture2D;
 
-		//Projectile 	= Resources.Load("Bullet") as GameObject;
+		Projectile 	= Resources.Load("Bullet") as GameObject;
 
         bomb = Resources.Load("Bomb") as GameObject;
         Model = transform.FindChild("Model").gameObject;
@@ -69,22 +69,22 @@ public class Player : MonoBehaviour
 	}
 	Vector2 CheckMovement ()
 	{
-		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.RightArrow))
 		{
 			Vector2 MovementDirection = Vector2.zero;
-			if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
 			{
 				MovementDirection.y += MovementSpeed;
 			}
-			if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
 			{
 				MovementDirection.x -= MovementSpeed;
 			}
-			if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
 			{
 				MovementDirection.y -= MovementSpeed;
 			}
-			if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
 			{
 				MovementDirection.x += MovementSpeed;
 			}
