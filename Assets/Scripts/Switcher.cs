@@ -12,12 +12,14 @@ public class Switcher : MonoBehaviour
 			if (transform.parent.FindChild("Light").light.color == Color.green)
 			{
 				transform.parent.FindChild("Light").light.color = Color.red;
-				
+				transform.parent.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type2);
 			}
 			else
 			{
 				transform.parent.FindChild("Light").light.color = Color.green;
+				transform.parent.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type1);
 			}
+			GameObject.Find("Game").GetComponent<Game>().CheckIfWinPatternIsReached();
 		}
 	}
 	void OnTriggerExit2D (Collider2D col)
