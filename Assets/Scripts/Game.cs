@@ -5,34 +5,56 @@ public class Game : MonoBehaviour
 	private int PlatformRows = 3;
 	private int PlatformColumns = 3;
 
-	private Platform[,] Platforms;
+	private GameObject Platforms;
+	private Platform[,] PlatformFields;
 	private Platform.PlatformColorType[,] PlattformPattern = new Platform.PlatformColorType[4, 4];
 
 	private GameObject WinPattern;
 	private GameObject[,] WinPatternBlocks;
 	private GameObject WinPatternPositionBlinker;
+
+	public bool FirstLoad = false;
 	void Start ()
 	{
-		Platforms = new Platform[PlatformRows, PlatformColumns];
-
+		DontDestroyOnLoad(gameObject);
+	}
+	void Update ()
+	{
+		if (Input.GetKeyDown(KeyCode.O))
+		{
+			Application.LoadLevel(1);
+		}
+	}
+	void OnLevelWasLoaded (int Level)
+	{
+		if (Level == 1)
+		{
+			InitiateGame();
+		}
+	}
+	void InitiateGame ()
+	{
+		PlatformFields = new Platform[PlatformRows, PlatformColumns];
 		WinPattern = new GameObject("WinPattern");
 		WinPatternPositionBlinker = Instantiate(Resources.Load("WinPatternPositionBlinker") as GameObject) as GameObject;
 		WinPatternPositionBlinker.transform.parent = WinPattern.transform;
 		WinPatternBlocks = new GameObject[PlatformRows,PlatformColumns];
-
+		
 		GeneratePlatform();
-		GeneratePlatformWinPattern();
-	}            
+		GenerateWinPattern();
+	}
+
 	void GeneratePlatform ()
 	{
+		Platforms = new GameObject("Platforms");
 		GameObject GroundPlatformPrefab = Resources.Load("Platform") as GameObject;
 		for (int i = 0; i < PlatformRows; i++)
 		{
 			for (int j = 0; j < PlatformColumns; j++)
 			{
 				GameObject createdPlatform = Instantiate(GroundPlatformPrefab) as GameObject;
-				Platforms[i, j] = createdPlatform.GetComponent<Platform>();
-
+				PlatformFields[i, j] = createdPlatform.GetComponent<Platform>();
+				createdPlatform.transform.parent = Platforms.transform;
 				createdPlatform.transform.position = new Vector2(i * createdPlatform.transform.lossyScale.x + createdPlatform.transform.lossyScale.x / 2, j * createdPlatform.transform.lossyScale.y + createdPlatform.transform.lossyScale.y / 2);
 				createdPlatform.GetComponent<Platform>().PositionX = i;
 				createdPlatform.GetComponent<Platform>().PositionY = j;
@@ -51,7 +73,7 @@ public class Game : MonoBehaviour
 		}
 	}
 
-	void GeneratePlatformWinPattern ()
+	void GenerateWinPattern ()
 	{
 		WinPattern.SetActive(false);
 		WinPattern.transform.parent = GameObject.Find("Player/Camera").transform;
