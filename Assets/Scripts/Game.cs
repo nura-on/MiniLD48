@@ -14,6 +14,13 @@ public class Game : MonoBehaviour
 	private GameObject[,] WinPatternBlocks;
 	private GameObject WinPatternPositionBlinker;
 
+    public enum GameState {
+        NotRunning,
+        InWave,
+        WaceClear
+    }
+    public GameState state = GameState.NotRunning;
+
     private int currentWave = 0;
 
     public int CurrentWave
@@ -22,11 +29,13 @@ public class Game : MonoBehaviour
         set { currentWave = value; }
     }
 
+    #region singleton
     private Game() { }
     private static Game _singleton;
     public static Game Instance {
         get { return (_singleton == null ? new Game() : _singleton); }
     }
+    #endregion
 
     void Awake () {
         _singleton = this;
@@ -56,9 +65,10 @@ public class Game : MonoBehaviour
 		WinPatternPositionBlinker = Instantiate(Resources.Load("WinPatternPositionBlinker") as GameObject) as GameObject;
 		WinPatternPositionBlinker.transform.parent = WinPattern.transform;
 		WinPatternBlocks = new GameObject[PlatformRows,PlatformColumns];
-		
+
 		GeneratePlatform();
 		GenerateWinPattern();
+        state = GameState.InWave;
 	}
 
 	void GeneratePlatform ()
