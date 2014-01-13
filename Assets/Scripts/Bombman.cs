@@ -13,7 +13,7 @@ public class Bombman : MonsterBasic
 
     public int maxMovementSpeed = 200;
 
-	public int DistanceToBurst = 32;
+    public int DistanceToBurst = 32;
 
     void Awake()
     {
@@ -33,30 +33,29 @@ public class Bombman : MonsterBasic
     void Start()
     {
         state = State.Spawn;
-		BaiscStart();
+        BaiscStart();
     }
 
     // Update is called once per frame
     void Update()
     {
-		BaiscUpdate();
         if (state == State.Spawn)
         {
             state = State.Alive;
             StartCoroutine(_Animation());
         }
-        if (state == State.Alive)
+        if (state == State.Alive && Game.Instance.state == Game.GameState.InWave)
         {
-            // TODO check animation and switch if necessary
+            BaiscUpdate(); //infuckingheritance
 
             // kinematic seek
             _KinematicSeek();
 
             // burst within radius
-			if (CheckRadius())
-			{
-				BurstWithinRadius();
-			}
+            if (CheckRadius())
+            {
+                BurstWithinRadius();
+            }
         }
         if (state == State.Dead)
         {
@@ -64,30 +63,30 @@ public class Bombman : MonsterBasic
         }
     }
 
-	private bool CheckRadius ()
-	{
-		if (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(_player.position.x, _player.position.y)) < DistanceToBurst)
-		{
-			return true;
-		}
-		return false;
-	}
+    private bool CheckRadius()
+    {
+        if (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(_player.position.x, _player.position.y)) < DistanceToBurst)
+        {
+            return true;
+        }
+        return false;
+    }
 
-	private void BurstWithinRadius ()
-	{
-		_player.GetComponent<Player>().ReceiveDamage(20);
-		Instantiate(Resources.Load("Explosion") as GameObject, transform.position, Quaternion.identity);
-		Instantiate(Resources.Load("Blood") as GameObject, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Quaternion.identity);
-		Instantiate(Resources.Load("Crater") as GameObject, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
-		Destroy(gameObject);
-	}
+    private void BurstWithinRadius()
+    {
+        _player.GetComponent<Player>().ReceiveDamage(20);
+        Instantiate(Resources.Load("Explosion") as GameObject, transform.position, Quaternion.identity);
+        Instantiate(Resources.Load("Blood") as GameObject, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Quaternion.identity);
+        Instantiate(Resources.Load("Crater") as GameObject, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
+        Destroy(gameObject);
+    }
 
     private IEnumerator _Animation()
     {
         int i = 0;
         Texture tex = _mat.mainTexture;
         _mat.mainTextureScale = new Vector2(1f / (tex.width / 32f), 1f);
-        while (state == State.Alive)
+        while (state == State.Alive && Game.Instance.state == Game.GameState.InWave)
         {
             _mat.mainTextureOffset = new Vector2(1f / (tex.width / 32f) * i, 0);
             if (i == (tex.width / 32) - 1)

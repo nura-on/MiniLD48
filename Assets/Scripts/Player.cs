@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 	private int ArmorPointsCurrent = 0;
 	private Texture2D WalkAnimation;
 	private Camera PlayerCamera;
+
 	void Awake ()
 	{
 		WalkAnimation = Resources.Load("WalkAnimation") as Texture2D;
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour
 		}
 		else
 		{
+            Game.Instance.state = Game.GameState.NotRunning;
 			return false;
 		}
 	}
