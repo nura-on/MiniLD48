@@ -32,6 +32,7 @@ public class Game : MonoBehaviour
     #region singleton
     private Game() { }
     private static Game _singleton;
+    private Object _block;
     public static Game Instance {
         get { return (_singleton == null ? new Game() : _singleton); }
     }
@@ -39,6 +40,7 @@ public class Game : MonoBehaviour
 
     void Awake () {
         _singleton = this;
+        _block = Resources.Load("WinPatternBlock") as GameObject;
     }
 	void Start ()
 	{
@@ -104,13 +106,13 @@ public class Game : MonoBehaviour
 	void GenerateWinPattern ()
 	{
 		WinPattern.SetActive(false);
-		WinPattern.transform.parent = GameObject.Find("Player/Camera").transform;
+        WinPattern.transform.parent = Camera.main.transform;
 		WinPattern.transform.localPosition = new Vector3(-35, -35, 1);
 		for (int i = 0; i < PlatformRows; i++)
 		{
 			for (int j = 0; j < PlatformColumns; j++)
             {
-				GameObject createdBlock = Instantiate(Resources.Load("WinPatternBlock") as GameObject) as GameObject;
+				GameObject createdBlock = Instantiate(_block) as GameObject;
 				WinPatternBlocks[i, j] = createdBlock;
 				createdBlock.transform.parent = WinPattern.transform;
 				createdBlock.transform.localPosition =  new Vector3(8 + i * 16 + i * 2, 8 + j * 16 + j * 2, 0);
