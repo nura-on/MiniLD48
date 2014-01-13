@@ -55,9 +55,32 @@ public class Game : MonoBehaviour
 	{
 		if (Level == 1)
 		{
+			state = GameState.NotRunning;
 			InitiateGame();
+			StartCoroutine(StartWaveCountDown());
+			StartCoroutine(DisplayPatterForXSeconds());
 		}
 	}
+
+	IEnumerator StartWaveCountDown ()
+	{
+		Debug.Log("3");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("2");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("1");
+		yield return new WaitForSeconds(1f);
+		Debug.Log("GO!");
+		state = GameState.InWave;
+	}
+
+	IEnumerator DisplayPatterForXSeconds()
+	{
+		AbleDisableWinPattern(true, 1, 1);
+		yield return new WaitForSeconds(3f);
+		AbleDisableWinPattern(false, 1, 1);
+	}
+
 	void InitiateGame ()
 	{
 		PlatformFields = new Platform[PlatformRows, PlatformColumns];
@@ -68,7 +91,6 @@ public class Game : MonoBehaviour
 
 		GeneratePlatform();
 		GenerateWinPattern();
-        state = GameState.InWave;
 	}
 
 	void GeneratePlatform ()

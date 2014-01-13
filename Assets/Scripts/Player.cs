@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
 	void Update ()
 	{
 		//Checks if the Character is Alive
-		if (CheckIfAlive())
+		if (CheckIfAlive() && Game.Instance.state == Game.GameState.InWave)
 		{
 			//Movement
 			PerformMovement(CheckMovement());
