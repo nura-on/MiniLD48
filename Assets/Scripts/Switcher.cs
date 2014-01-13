@@ -40,7 +40,12 @@ public class Switcher : MonoBehaviour
 		if (col.name == "Player")
 		{
 			renderer.material.mainTextureOffset = new Vector2(0, 0);
-			_game.AbleDisableWinPattern(false, transform.parent.GetComponent<Platform>().PositionX, transform.parent.GetComponent<Platform>().PositionY);
+			StartCoroutine(DisableWinPatternAfterXSeconds());
 		}
+	}
+	IEnumerator DisableWinPatternAfterXSeconds ()
+	{
+		yield return new WaitForSeconds(1f);
+		_game.AbleDisableWinPattern(false, transform.parent.GetComponent<Platform>().PositionX, transform.parent.GetComponent<Platform>().PositionY);
 	}
 }
