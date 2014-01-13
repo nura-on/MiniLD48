@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 	private int ArmorPointsCurrent = 0;
 	private Texture2D WalkAnimation;
 	private Camera PlayerCamera;
+	private float FullAutomaticFireRate = 0.05f;
+	private bool FullAutomaticFireReady = true;
 
 	void Awake ()
 	{
@@ -35,9 +37,13 @@ public class Player : MonoBehaviour
 			PerformRotation();
 
 			//Attack
-			if (Input.GetKeyDown(KeyCode.Mouse0))
+			if (Input.GetKey(KeyCode.Mouse0))
 			{
-				Instantiate(Projectile, SpawnPoint1.transform.position, SpawnPoint1.transform.rotation);
+				if (FullAutomaticFireReady)
+				{
+					Instantiate(Projectile, SpawnPoint1.transform.position, SpawnPoint1.transform.rotation);
+					StartCoroutine(SetCooldownFullAutomaticFire());
+				}
 			}
 			if (Input.GetKeyDown(KeyCode.F))
 			{
@@ -46,6 +52,12 @@ public class Player : MonoBehaviour
 		}
 		FitModelToPixel();
 		FitCameraToPixel();
+	}
+	IEnumerator SetCooldownFullAutomaticFire ()
+	{
+		FullAutomaticFireReady = false;
+		yield return new WaitForSeconds(FullAutomaticFireRate);
+		FullAutomaticFireReady = true;
 	}
 	void FitModelToPixel ()
 	{
