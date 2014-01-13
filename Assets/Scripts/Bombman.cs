@@ -19,6 +19,8 @@ public class Bombman : MonsterBasic
     {
         _player = GameObject.Find("Player").transform;
         _mat = transform.FindChild("Model").renderer.material;
+
+        currentHP = 40;
     }
     // backup
     void OnLevelWasLoaded(int Level)
