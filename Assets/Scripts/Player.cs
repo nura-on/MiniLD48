@@ -67,6 +67,12 @@ public class Player : MonoBehaviour
 			return false;
 		}
 	}
+
+	public void ReceiveDamage (int dmg)
+	{
+		HealthPointsCurrent -= dmg;
+	}
+
 	Vector2 CheckMovement ()
 	{
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.RightArrow))
