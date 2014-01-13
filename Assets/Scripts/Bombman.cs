@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Bombman : MonoBehaviour
+public class Bombman : MonsterBasic
 {
 
     public enum State { Spawn, Alive, Dead }
@@ -13,10 +13,12 @@ public class Bombman : MonoBehaviour
 
     public int maxMovementSpeed = 200;
 
+	public int DistanceToBurst = 32;
+
     void Awake()
     {
         _player = GameObject.Find("Player").transform;
-        _mat = transform.FindChild("Sprite").renderer.material;
+        _mat = transform.FindChild("Model").renderer.material;
     }
     // backup
     void OnLevelWasLoaded(int Level)
@@ -31,11 +33,13 @@ public class Bombman : MonoBehaviour
     void Start()
     {
         state = State.Spawn;
+		BaiscStart();
     }
 
     // Update is called once per frame
     void Update()
     {
+		BaiscUpdate();
         if (state == State.Spawn)
         {
             state = State.Alive;
@@ -48,13 +52,35 @@ public class Bombman : MonoBehaviour
             // kinematic seek
             _KinematicSeek();
 
-            // TODO burst within radius
+            // burst within radius
+			if (CheckRadius())
+			{
+				BurstWithinRadius();
+			}
         }
         if (state == State.Dead)
         {
             // TODO either remove or replace with some decal sprite
         }
     }
+
+	private bool CheckRadius ()
+	{
+		if (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(_player.position.x, _player.position.y)) < DistanceToBurst)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	private void BurstWithinRadius ()
+	{
+		_player.GetComponent<Player>().ReceiveDamage(20);
+		Instantiate(Resources.Load("Explosion") as GameObject, transform.position, Quaternion.identity);
+		Instantiate(Resources.Load("Blood") as GameObject, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Quaternion.identity);
+		Instantiate(Resources.Load("Crater") as GameObject, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
+		Destroy(gameObject);
+	}
 
     private IEnumerator _Animation()
     {
