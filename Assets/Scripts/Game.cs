@@ -13,6 +13,9 @@ public class Game : MonoBehaviour
 	private GameObject WinPattern;
 	private GameObject[,] WinPatternBlocks;
 	private GameObject WinPatternPositionBlinker;
+	private string CountDownText;
+
+	public GUIStyle GUIStyle1;
 
     public enum GameState {
         NotRunning,
@@ -42,10 +45,12 @@ public class Game : MonoBehaviour
         _singleton = this;
         _block = Resources.Load("WinPatternBlock") as GameObject;
     }
+
 	void Start ()
 	{
 		DontDestroyOnLoad(gameObject);
 	}
+
 	void Update ()
 	{
 		if (Input.GetKeyDown(KeyCode.O))
@@ -53,6 +58,12 @@ public class Game : MonoBehaviour
 			Application.LoadLevel(1);
 		}
 	}
+
+	void OnGUI ()
+	{
+		GUI.Label(new Rect(Screen.width / 2, Screen.height / 2 - Screen.height * 0.2f, 0, 0), CountDownText, GUIStyle1);
+	}
+
 	void OnLevelWasLoaded (int Level)
 	{
 		if (Level == 1)
@@ -66,13 +77,17 @@ public class Game : MonoBehaviour
 
 	IEnumerator StartWaveCountDown ()
 	{
-		Debug.Log("3");
+		CountDownText = "<size=50>NEW WAVE</size>";
+		yield return new WaitForSeconds(1.5f);
+		CountDownText = "<size=50>3</size>";
 		yield return new WaitForSeconds(1f);
-		Debug.Log("2");
+		CountDownText = "<size=50>2</size>";
 		yield return new WaitForSeconds(1f);
-		Debug.Log("1");
+		CountDownText = "<size=50>1</size>";
 		yield return new WaitForSeconds(1f);
-		Debug.Log("GO!");
+		CountDownText = "<size=50>GO!</size>";
+		yield return new WaitForSeconds(1f);
+		CountDownText = "";
 		state = GameState.InWave;
 	}
 
@@ -129,7 +144,7 @@ public class Game : MonoBehaviour
 	{
 		WinPattern.SetActive(false);
         WinPattern.transform.parent = Camera.main.transform;
-		WinPattern.transform.localPosition = new Vector3(-35, -35, 1);
+		WinPattern.transform.localPosition = new Vector3(-26, -26, 1);
 		for (int i = 0; i < PlatformRows; i++)
 		{
 			for (int j = 0; j < PlatformColumns; j++)
