@@ -9,13 +9,14 @@ public class SpawnManager : MonoBehaviour
     private Game _gm;
     private float _spawnFrequency = 1f;
 
-    GameObject _bombman, _player;
+    GameObject _bombman;
+    Transform _player;
 
     void OnLevelWasLoaded(int level)
     {
         if (level == 1)
         {
-            _player = GameObject.Find("Player");
+            _player = Player.Instance.gameObject.transform;
             _RearrangeSpawnPoints();
         }
     }
@@ -25,7 +26,7 @@ public class SpawnManager : MonoBehaviour
         for (uint i = 0; i < spawnPoints.Length; i++)
         {
             spawnPoints[i] = new GameObject();
-            spawnPoints[i].transform.parent = _player.transform;
+            spawnPoints[i].transform.parent = _player;
         }
         spawnPoints[0].transform.localPosition = new Vector2(0, 340);
         spawnPoints[1].transform.localPosition = new Vector2(0, -340);

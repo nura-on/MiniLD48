@@ -2,22 +2,23 @@
 using System.Collections;
 public class Game : MonoBehaviour
 {
-	private int PlatformRows = 3;
-	private int PlatformColumns = 3;
+    private int platformRows = 3;
+    private int platformColumns = 3;
 
-	private int PlatformWidth = 512, PlatformHeight = 512;
-	private GameObject Platforms;
-	private Platform[,] PlatformFields;
+    private int platformWidth = 512, platformHeight = 512;
+    private GameObject platforms;
+    private Platform[,] platformFields;
 
-	public Platform.PlatformColorType[,] WinPatternTypes = new Platform.PlatformColorType[4, 4];
-	private GameObject WinPattern;
-	private GameObject[,] WinPatternBlocks;
-	private GameObject WinPatternPositionBlinker;
-	private string CountDownText;
+    public Platform.PlatformColorType[,] winPatternTypes = new Platform.PlatformColorType[4, 4];
+    private GameObject winPattern, _platform;
+    private GameObject[,] winPatternBlocks;
+    private GameObject winPatternPositionBlinker;
+    private string countDownText;
 
-	public GUIStyle GUIStyle1;
+    public GUIStyle guiStyle;
 
-    public enum GameState {
+    public enum GameState
+    {
         NotRunning,
         InWave,
         WaceClear
@@ -36,157 +37,163 @@ public class Game : MonoBehaviour
     private Game() { }
     private static Game _singleton;
     private Object _block;
-    public static Game Instance {
+    private Object _winPattern;
+    public static Game Instance
+    {
         get { return (_singleton == null ? new Game() : _singleton); }
     }
     #endregion
 
-    void Awake () {
+    void Awake()
+    {
         _singleton = this;
         _block = Resources.Load("WinPatternBlock") as GameObject;
+        _winPattern = Resources.Load("WinPatternPositionBlinker") as GameObject;
+        _platform = Resources.Load("Platform") as GameObject;
     }
 
-	void Start ()
-	{
-		DontDestroyOnLoad(gameObject);
-	}
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
-	void Update ()
-	{
-		if (Input.GetKeyDown(KeyCode.O))
-		{
-			Application.LoadLevel(1);
-		}
-	}
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Application.LoadLevel(1);
+        }
+    }
 
-	void OnGUI ()
-	{
-		GUI.Label(new Rect(Screen.width / 2, Screen.height / 2 - Screen.height * 0.2f, 0, 0), CountDownText, GUIStyle1);
-	}
+    void OnGUI()
+    {
+        GUI.Label(new Rect(Screen.width / 2, Screen.height / 2 - Screen.height * 0.2f, 0, 0), countDownText, guiStyle);
+    }
 
-	void OnLevelWasLoaded (int Level)
-	{
-		if (Level == 1)
-		{
-			state = GameState.NotRunning;
-			InitiateGame();
-			StartCoroutine(StartWaveCountDown());
-			StartCoroutine(DisplayPatterForXSeconds());
-		}
-	}
+    void OnLevelWasLoaded(int level)
+    {
+        if (level == 1)
+        {
+            state = GameState.NotRunning;
+            InitiateGame();
+            StartCoroutine(StartWaveCountDown());
+            StartCoroutine(DisplayPatterForXSeconds(3.0f));
+        }
+    }
 
-	IEnumerator StartWaveCountDown ()
-	{
-		CountDownText = "<size=50>NEW WAVE</size>";
-		yield return new WaitForSeconds(1.5f);
-		CountDownText = "<size=50>3</size>";
-		yield return new WaitForSeconds(1f);
-		CountDownText = "<size=50>2</size>";
-		yield return new WaitForSeconds(1f);
-		CountDownText = "<size=50>1</size>";
-		yield return new WaitForSeconds(1f);
-		CountDownText = "<size=50>GO!</size>";
-		yield return new WaitForSeconds(1f);
-		CountDownText = "";
-		state = GameState.InWave;
-	}
+    IEnumerator StartWaveCountDown()
+    {
+        countDownText = "<color=white><size=50>NEW WAVE</size></color>";
+        yield return new WaitForSeconds(1.5f);
+        countDownText = "<color=white><size=50>3</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "<color=white><size=50>2</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "<color=white><size=50>1</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "<color=white><size=50>GO!</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "";
+        //yield return null;
+        state = GameState.InWave;
+    }
 
-	IEnumerator DisplayPatterForXSeconds()
-	{
-		AbleDisableWinPattern(true, 1, 1);
-		yield return new WaitForSeconds(3f);
-		AbleDisableWinPattern(false, 1, 1);
-	}
+    IEnumerator DisplayPatterForXSeconds(float sec)
+    {
+        AbleDisableWinPattern(true, 1, 1);
+        yield return new WaitForSeconds(sec);
+        AbleDisableWinPattern(false, 1, 1);
+    }
 
-	void InitiateGame ()
-	{
-		PlatformFields = new Platform[PlatformRows, PlatformColumns];
-		WinPattern = new GameObject("WinPattern");
-		WinPatternPositionBlinker = Instantiate(Resources.Load("WinPatternPositionBlinker") as GameObject) as GameObject;
-		WinPatternPositionBlinker.transform.parent = WinPattern.transform;
-		WinPatternBlocks = new GameObject[PlatformRows,PlatformColumns];
+    void InitiateGame()
+    {
+        platformFields = new Platform[platformRows, platformColumns];
+        winPattern = new GameObject("WinPattern");
+        winPatternPositionBlinker = Instantiate(_winPattern) as GameObject;
+        winPatternPositionBlinker.transform.parent = winPattern.transform;
+        winPatternBlocks = new GameObject[platformRows, platformColumns];
 
-		GeneratePlatform();
-		GenerateWinPattern();
-	}
+        GeneratePlatform();
+        GenerateWinPattern();
+    }
 
-	void GeneratePlatform ()
-	{
-		Platforms = new GameObject("Platforms");
-		GameObject GroundPlatformPrefab = Resources.Load("Platform") as GameObject;
-		for (int i = 0; i < PlatformRows; i++)
-		{
-			for (int j = 0; j < PlatformColumns; j++)
-			{
-				GameObject createdPlatform = Instantiate(GroundPlatformPrefab) as GameObject;
-				PlatformFields[i, j] = createdPlatform.GetComponent<Platform>();
-				createdPlatform.transform.FindChild("Model").transform.localScale = new Vector3(PlatformWidth, PlatformHeight, 1);
-				createdPlatform.transform.parent = Platforms.transform;
-				createdPlatform.transform.position = new Vector2(i * PlatformWidth + PlatformWidth / 2, j * PlatformHeight + PlatformHeight / 2);
-				createdPlatform.GetComponent<Platform>().PositionX = i;
-				createdPlatform.GetComponent<Platform>().PositionY = j;
-				createdPlatform.renderer.material.mainTextureScale = new Vector2(createdPlatform.renderer.material.mainTexture.width / 48 * 15, createdPlatform.renderer.material.mainTexture.height / 48 * 15);
-				if (Random.Range(0, 2) == 1)
-				{
-					createdPlatform.transform.FindChild("Light").light.color = Color.green;
-					createdPlatform.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type1);
-				}
-				else
-				{
-					createdPlatform.transform.FindChild("Light").light.color = Color.red;
-					createdPlatform.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type2);
-				}
-			}
-		}
-	}
-
-	void GenerateWinPattern ()
-	{
-		WinPattern.SetActive(false);
-        WinPattern.transform.parent = Camera.main.transform;
-		WinPattern.transform.localPosition = new Vector3(-26, -26, 1);
-		for (int i = 0; i < PlatformRows; i++)
-		{
-			for (int j = 0; j < PlatformColumns; j++)
+    void GeneratePlatform()
+    {
+        platforms = new GameObject("Platforms");
+        GameObject GroundPlatformPrefab = _platform;
+        for (int i = 0; i < platformRows; i++)
+        {
+            for (int j = 0; j < platformColumns; j++)
             {
-				GameObject createdBlock = Instantiate(_block) as GameObject;
-				WinPatternBlocks[i, j] = createdBlock;
-				createdBlock.transform.parent = WinPattern.transform;
-				createdBlock.transform.localPosition =  new Vector3(8 + i * 16 + i * 2, 8 + j * 16 + j * 2, 0);
-				if (Random.Range(0, 2) == 1)
-				{
-					WinPatternTypes[i, j] = Platform.PlatformColorType.Type1;
-					createdBlock.renderer.material.color = Color.green;
-				}
-				else
-				{
-					WinPatternTypes[i, j] = Platform.PlatformColorType.Type2;
-					createdBlock.renderer.material.color = Color.red;
-				}
-			}
-		}
-	}
-	public void AbleDisableWinPattern (bool State, int xPos, int yPos)
-	{
-		WinPattern.SetActive(State);
-		WinPatternPositionBlinker.transform.position = new Vector3(WinPatternBlocks[xPos, yPos].transform.position.x, WinPatternBlocks[xPos, yPos].transform.position.y, WinPatternBlocks[xPos, yPos].transform.position.z - 0.1f);
-	}
-	public bool CheckIfWinPatternIsReached ()
-	{
-		for (int i = 0; i < PlatformRows; i++)
-		{
-			for (int j = 0; j < PlatformColumns; j++)
-			{
-				if (WinPatternTypes[i, j] != PlatformFields[i, j].CurrentPlatformType)
-				{
+                GameObject createdPlatform = Instantiate(GroundPlatformPrefab) as GameObject;
+                platformFields[i, j] = createdPlatform.GetComponent<Platform>();
+                createdPlatform.transform.FindChild("Model").transform.localScale = new Vector3(platformWidth, platformHeight, 1);
+                createdPlatform.transform.parent = platforms.transform;
+                createdPlatform.transform.position = new Vector2(i * platformWidth + platformWidth / 2, j * platformHeight + platformHeight / 2);
+                createdPlatform.GetComponent<Platform>().PositionX = i;
+                createdPlatform.GetComponent<Platform>().PositionY = j;
+                createdPlatform.renderer.material.mainTextureScale = new Vector2(createdPlatform.renderer.material.mainTexture.width / 48 * 15, createdPlatform.renderer.material.mainTexture.height / 48 * 15);
+                if (Random.Range(0, 2) == 1)
+                {
+                    createdPlatform.transform.FindChild("Light").light.color = Color.green;
+                    createdPlatform.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type1);
+                }
+                else
+                {
+                    createdPlatform.transform.FindChild("Light").light.color = Color.red;
+                    createdPlatform.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type2);
+                }
+            }
+        }
+    }
+
+    void GenerateWinPattern()
+    {
+        winPattern.SetActive(false);
+        winPattern.transform.parent = Camera.main.transform;
+        winPattern.transform.localPosition = new Vector3(-26, -26, 1);
+        for (int i = 0; i < platformRows; i++)
+        {
+            for (int j = 0; j < platformColumns; j++)
+            {
+                GameObject createdBlock = Instantiate(_block) as GameObject;
+                winPatternBlocks[i, j] = createdBlock;
+                createdBlock.transform.parent = winPattern.transform;
+                createdBlock.transform.localPosition = new Vector3(8 + i * 16 + i * 2, 8 + j * 16 + j * 2, 0);
+                if (Random.Range(0, 2) == 1)
+                {
+                    winPatternTypes[i, j] = Platform.PlatformColorType.Type1;
+                    createdBlock.renderer.material.color = Color.green;
+                }
+                else
+                {
+                    winPatternTypes[i, j] = Platform.PlatformColorType.Type2;
+                    createdBlock.renderer.material.color = Color.red;
+                }
+            }
+        }
+    }
+    public void AbleDisableWinPattern(bool State, int xPos, int yPos)
+    {
+        winPattern.SetActive(State);
+        winPatternPositionBlinker.transform.position = new Vector3(winPatternBlocks[xPos, yPos].transform.position.x, winPatternBlocks[xPos, yPos].transform.position.y, winPatternBlocks[xPos, yPos].transform.position.z - 0.1f);
+    }
+    public bool CheckIfWinPatternIsReached()
+    {
+        for (int i = 0; i < platformRows; i++)
+        {
+            for (int j = 0; j < platformColumns; j++)
+            {
+                if (winPatternTypes[i, j] != platformFields[i, j].CurrentPlatformType)
+                {
                     return false;
-				}
-				else if (i == PlatformRows - 1 && j == PlatformColumns - 1)
-				{
+                }
+                else if (i == platformRows - 1 && j == platformColumns - 1)
+                {
                     return true;
-				}
-			}
-		}
+                }
+            }
+        }
         return false;
-	}
+    }
 }

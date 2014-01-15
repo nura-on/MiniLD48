@@ -16,8 +16,8 @@ public class E_Bombman : MonsterBasic
 
     void Awake()
     {
-        base.player = GameObject.Find("Player").transform;
-       
+        base.player = Player.Instance;
+
         _explo = Resources.Load("Explosion") as GameObject;
         _blood = Resources.Load("Blood") as GameObject;
         _crater = Resources.Load("Crater") as GameObject;
@@ -31,7 +31,7 @@ public class E_Bombman : MonsterBasic
     {
         if (level == 1)
         {
-            if (base.player == null) base.player = GameObject.Find("Player").transform;
+            if (base.player == null) base.player = Player.Instance;
         }
     }
 
@@ -51,7 +51,7 @@ public class E_Bombman : MonsterBasic
         if (base.state == State.Alive && Game.Instance.state == Game.GameState.InWave)
         {
             //infuckingheritance
-            base.Update(); 
+            base.Update();
 
             // kinematic seek
             _KinematicSeek();
@@ -72,7 +72,7 @@ public class E_Bombman : MonsterBasic
 
     private void BurstWithinRadius()
     {
-        base.player.GetComponent<Player>().ReceiveDamage(20);
+        base.player.ReceiveDamage(20);
         Instantiate(_explo, transform.position, Quaternion.identity);
         Instantiate(_blood, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Quaternion.identity);
         Instantiate(_crater, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
@@ -81,7 +81,7 @@ public class E_Bombman : MonsterBasic
 
     private void _KinematicSeek()
     {
-        _targetPos = base.player.position;
+        _targetPos = base.player.transform.position;
         _distance = _targetPos - transform.position;
         _direction = _distance.normalized;
         _velocity = _direction * maxMovementSpeed;

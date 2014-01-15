@@ -5,26 +5,30 @@ public class Switcher : MonoBehaviour
 {
 
     private Game _game;
+    private Color _lightColor;
+    private Platform _platform;
 
     void Awake() {
         _game = Game.Instance;
+        _lightColor = transform.parent.FindChild("Light").light.color;
+        _platform = transform.parent.GetComponent<Platform>();
     }
 
 	void OnTriggerEnter2D (Collider2D col)
 	{
 		if (col.name == "Player")
 		{
-			_game.AbleDisableWinPattern(true, transform.parent.GetComponent<Platform>().PositionX, transform.parent.GetComponent<Platform>().PositionY);
+            _game.AbleDisableWinPattern(true, _platform.PositionX, _platform.PositionY);
 			renderer.material.mainTextureOffset = new Vector2(0.5f, 0);
-			if (transform.parent.FindChild("Light").light.color == Color.green)
+			if (_lightColor == Color.green)
 			{
-				transform.parent.FindChild("Light").light.color = Color.red;
-				transform.parent.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type2);
+				_lightColor = Color.red;
+                _platform.ChangeMyType(Platform.PlatformColorType.Type2);
 			}
 			else
 			{
-				transform.parent.FindChild("Light").light.color = Color.green;
-				transform.parent.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type1);
+				_lightColor = Color.green;
+                _platform.ChangeMyType(Platform.PlatformColorType.Type1);
 			}
             if (_game.CheckIfWinPatternIsReached()) {
                 // TODO reload and load next wave
@@ -45,6 +49,6 @@ public class Switcher : MonoBehaviour
 	IEnumerator DisableWinPatternAfterXSeconds ()
 	{
 		yield return new WaitForSeconds(1f);
-		_game.AbleDisableWinPattern(false, transform.parent.GetComponent<Platform>().PositionX, transform.parent.GetComponent<Platform>().PositionY);
+        _game.AbleDisableWinPattern(false, _platform.PositionX, _platform.PositionY);
 	}
 }

@@ -4,6 +4,9 @@ using System.Collections;
 /// <summary>
 /// chose that stupid name on purpose ;)
 /// https://www.youtube.com/watch?v=AJdEqssNZ-U&list=PL5xVeqDOX7ZwU5SkooCf8dMSTWYyRk_r_&index=1
+/// 
+///
+/// TODO use enemy positions for calc and adjust the lookat function of player
 /// </summary>
 public class CameraGameFeel : MonoBehaviour
 {

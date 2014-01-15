@@ -3,16 +3,16 @@ using System.Collections;
 
 public class DealDmg : MonoBehaviour
 {
-	public int DMG;
-	public string Tag;
+	private int damage;
+	private string tag;
 	void OnTriggerEnter2D (Collider2D col)
 	{
-		if (col.tag == Tag)
+		if (col.tag == tag)
 		{
 			MonsterBasic mBasic = col.GetComponent<MonsterBasic>();
 			if (mBasic)
 			{
-				mBasic.ReceiveDamage(DMG);
+				mBasic.ReceiveDamage(damage);
 			}
 		}
 	}

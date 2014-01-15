@@ -8,7 +8,7 @@ public class MonsterBasic : MonoBehaviour
     protected int currentHP = 100;
     protected float animationTimer = 0.05f;
     protected Material mat;
-    protected Transform player;
+    protected Player player;
 
     private int xDiff, yDiff;
    
@@ -19,7 +19,7 @@ public class MonsterBasic : MonoBehaviour
     {
         mat = transform.FindChild("Model").renderer.material;
 
-        player = GameObject.Find("Player").transform;
+        player = Player.Instance;
         model = transform.FindChild("Model");
     }
 
@@ -71,7 +71,7 @@ public class MonsterBasic : MonoBehaviour
 
     protected bool IsInRangeOfPlayer(int distance)
     {
-        if (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.position.x, player.position.y)) < distance)
+        if (Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y)) < distance)
         {
             return true;
         }
