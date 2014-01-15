@@ -27,8 +27,7 @@ public class Switcher : MonoBehaviour
 				transform.parent.GetComponent<Platform>().ChangeMyType(Platform.PlatformColorType.Type1);
 			}
             if (_game.CheckIfWinPatternIsReached()) {
-
-                Debug.Log("PatternMatch!!!");
+                // TODO reload and load next wave
                 Application.LoadLevel(1);
                 _game.CurrentWave++;
             }

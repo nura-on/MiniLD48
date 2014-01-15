@@ -40,10 +40,9 @@ public class SpawnManager : MonoBehaviour
     void Awake()
     {
         _gm = Game.Instance;
-        _bombman = Resources.Load("Enemy/Bombman/Bombman") as GameObject;
+        _bombman = Resources.Load("Enemies/Bombman/Bombman") as GameObject;
     }
 
-    // Use this for initialization
     void Start()
     {
         StartCoroutine(_SpawnEnemies());
@@ -55,10 +54,8 @@ public class SpawnManager : MonoBehaviour
         {
             if (_gm.state == Game.GameState.InWave)
             {
-                // TODO random spawn point 
                 // TODO random enemy
                 // TODO depending on wave
-
                 Instantiate(_bombman, spawnPoints[Random.Range(0, 8)].transform.position, Quaternion.Euler(Vector3.zero));
             }
             yield return new WaitForSeconds(Random.Range(_spawnFrequency - 0.5f, _spawnFrequency));
