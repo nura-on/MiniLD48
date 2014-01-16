@@ -5,14 +5,17 @@ public class MonsterBasic : MonoBehaviour
     public enum State { Spawn, Alive, Dead }
 
     protected State state;
-    protected int currentHP = 100;
+    public int currentHP = 100;
     protected float animationTimer = 0.05f;
     protected Material mat;
     protected Player player;
+    protected float resolution;
+    protected Vector3 direction, velocity, targetPos, distance, _relativeUp;
 
     private int xDiff, yDiff;
 
     private Transform model;
+    
 
     // Use this for initialization
     protected void Awake()
@@ -21,6 +24,10 @@ public class MonsterBasic : MonoBehaviour
 
         player = Player.Instance;
         model = transform.FindChild("Model");
+    }
+
+    protected void Start() {
+        state = State.Spawn;
     }
 
     // Update is called once per frame
@@ -85,11 +92,11 @@ public class MonsterBasic : MonoBehaviour
     {
         int i = 0;
         Texture tex = mat.mainTexture;
-        mat.mainTextureScale = new Vector2(1f / (tex.width / 32f), 1f);
+        mat.mainTextureScale = new Vector2(1f / (tex.width / resolution), 1f);
         while (state == State.Alive && Game.Instance.state == Game.GameState.InWave)
         {
-            mat.mainTextureOffset = new Vector2(1f / (tex.width / 32f) * i, 0);
-            if (i == (tex.width / 32) - 1)
+            mat.mainTextureOffset = new Vector2(1f / (tex.width / resolution) * i, 0);
+            if (i == (tex.width / resolution) - 1)
             {
                 i = 0;
             }
@@ -97,7 +104,7 @@ public class MonsterBasic : MonoBehaviour
             {
                 i++;
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(animationTimer);
         }
     }
 

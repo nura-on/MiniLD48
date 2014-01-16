@@ -1,21 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class E_Bombman : MonsterBasic
 {
 
-    private Vector3 _direction, _velocity, _targetPos, _distance, _relativeUp;
-    //private Material _mat;
-
     public int maxMovementSpeed = 200;
 
     public int distanceToBurst = 32;
-    private GameObject _explo;
-    private GameObject _crater;
-    private GameObject _blood;
+    private GameObject _blood, _explo, _crater;
+    public int explosionDamage = 40;
 
     void Awake()
     {
+        base.resolution = 32f;
         base.player = Player.Instance;
 
         _explo = Resources.Load("Explosion") as GameObject;
@@ -38,7 +36,7 @@ public class E_Bombman : MonsterBasic
     // Use this for initialization
     void Start()
     {
-        base.state = State.Spawn;
+        base.Start();
     }
 
     // Update is called once per frame
@@ -59,19 +57,22 @@ public class E_Bombman : MonsterBasic
             // burst within radius
             if (base.IsInRangeOfPlayer(distanceToBurst))
             {
-                BurstWithinRadius();
+                Explode();
             }
         }
         if (base.state == State.Dead)
         {
             // TODO either remove or replace with some decal sprite
+
+            // TODO random chance of exploding
             currentHP = 0;
             Destroy(gameObject);
         }
     }
 
-    private void BurstWithinRadius()
+    private void Explode()
     {
+        //ExplosionDamage(transform.position, distanceToBurst * 1.5f);
         base.player.ReceiveDamage(20);
         Instantiate(_explo, transform.position, Quaternion.identity);
         Instantiate(_blood, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Quaternion.identity);
@@ -79,13 +80,42 @@ public class E_Bombman : MonsterBasic
         state = State.Dead;
     }
 
+    // TODO buggy
+    void ExplosionDamage(Vector3 center, float radius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(center, 100);
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+
+            if (hitColliders[i] == transform.collider)
+            {
+                continue;
+            }
+            else if (hitColliders[i].tag == "Model")
+            {
+                hitColliders[i].transform.parent.GetComponent<MonsterBasic>().ReceiveDamage(explosionDamage);
+                Debug.Log(hitColliders[i].transform.parent.GetComponent<MonsterBasic>().currentHP);
+            }
+            else if (hitColliders[i].tag == "Enemy")
+            {
+                hitColliders[i].transform.GetComponent<MonsterBasic>().ReceiveDamage(explosionDamage);
+                Debug.Log(hitColliders[i].transform.GetComponent<MonsterBasic>().currentHP);
+            }
+
+            if (hitColliders[i].transform.GetComponent<MonsterBasic>() != null) Debug.Log("YOLO");
+            i++;
+        }
+    }
+
+
     private void _KinematicSeek()
     {
-        _targetPos = base.player.transform.position;
-        _distance = _targetPos - transform.position;
-        _direction = _distance.normalized;
-        _velocity = _direction * maxMovementSpeed;
+        base.targetPos = base.player.transform.position;
+        base.distance = base.targetPos - transform.position;
+        base.direction = base.distance.normalized;
+        base.velocity = base.direction * maxMovementSpeed;
 
-        transform.Translate(_velocity * Time.deltaTime);
+        transform.Translate(velocity * Time.deltaTime);
     }
 }

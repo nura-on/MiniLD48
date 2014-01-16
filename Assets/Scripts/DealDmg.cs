@@ -3,7 +3,7 @@ using System.Collections;
 
 public class DealDmg : MonoBehaviour
 {
-	public int damage;
+	public int damage; // public for balancing during runtime
 	public string tag;
 	void OnTriggerEnter2D (Collider2D col)
 	{
