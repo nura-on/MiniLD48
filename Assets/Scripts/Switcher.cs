@@ -18,7 +18,7 @@ public class Switcher : MonoBehaviour
 	{
 		if (col.name == "Player")
 		{
-            _game.AbleDisableWinPattern(true, _platform.PositionX, _platform.PositionY);
+            _game.TriggerWinPattern(true, _platform.PositionX, _platform.PositionY);
 			renderer.material.mainTextureOffset = new Vector2(0.5f, 0);
 			if (_lightColor == Color.green)
 			{
@@ -49,6 +49,6 @@ public class Switcher : MonoBehaviour
 	IEnumerator DisableWinPatternAfterXSeconds ()
 	{
 		yield return new WaitForSeconds(1f);
-        _game.AbleDisableWinPattern(false, _platform.PositionX, _platform.PositionY);
+        _game.TriggerWinPattern(false, _platform.PositionX, _platform.PositionY);
 	}
 }

@@ -83,26 +83,26 @@ public class Game : MonoBehaviour
 
     IEnumerator StartWaveCountDown()
     {
-        countDownText = "<color=white><size=50>NEW WAVE</size></color>";
-        yield return new WaitForSeconds(1.5f);
-        countDownText = "<color=white><size=50>3</size></color>";
-        yield return new WaitForSeconds(1f);
-        countDownText = "<color=white><size=50>2</size></color>";
-        yield return new WaitForSeconds(1f);
-        countDownText = "<color=white><size=50>1</size></color>";
-        yield return new WaitForSeconds(1f);
-        countDownText = "<color=white><size=50>GO!</size></color>";
-        yield return new WaitForSeconds(1f);
-        countDownText = "";
-        //yield return null;
+        //countDownText = "<color=white><size=50>NEW WAVE</size></color>";
+        //yield return new WaitForSeconds(1.5f);
+        //countDownText = "<color=white><size=50>3</size></color>";
+        //yield return new WaitForSeconds(1f);
+        //countDownText = "<color=white><size=50>2</size></color>";
+        //yield return new WaitForSeconds(1f);
+        //countDownText = "<color=white><size=50>1</size></color>";
+        //yield return new WaitForSeconds(1f);
+        //countDownText = "<color=white><size=50>GO!</size></color>";
+        //yield return new WaitForSeconds(1f);
+        //countDownText = "";
+        yield return null;
         state = GameState.InWave;
     }
 
     IEnumerator DisplayPatterForXSeconds(float sec)
     {
-        AbleDisableWinPattern(true, 1, 1);
+        //TriggerWinPattern(true, 1, 1);
         yield return new WaitForSeconds(sec);
-        AbleDisableWinPattern(false, 1, 1);
+        TriggerWinPattern(false, 1, 1);
     }
 
     void InitiateGame()
@@ -173,7 +173,7 @@ public class Game : MonoBehaviour
             }
         }
     }
-    public void AbleDisableWinPattern(bool State, int xPos, int yPos)
+    public void TriggerWinPattern(bool State, int xPos, int yPos)
     {
         winPattern.SetActive(State);
         winPatternPositionBlinker.transform.position = new Vector3(winPatternBlocks[xPos, yPos].transform.position.x, winPatternBlocks[xPos, yPos].transform.position.y, winPatternBlocks[xPos, yPos].transform.position.z - 0.1f);

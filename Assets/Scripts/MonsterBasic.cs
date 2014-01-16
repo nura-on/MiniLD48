@@ -3,7 +3,7 @@ using System.Collections;
 public class MonsterBasic : MonoBehaviour
 {
     public enum State { Spawn, Alive, Dead }
-   
+
     protected State state;
     protected int currentHP = 100;
     protected float animationTimer = 0.05f;
@@ -11,7 +11,7 @@ public class MonsterBasic : MonoBehaviour
     protected Player player;
 
     private int xDiff, yDiff;
-   
+
     private Transform model;
 
     // Use this for initialization
@@ -26,9 +26,11 @@ public class MonsterBasic : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
-        xDiff = 0;
-        yDiff = 0;
+        RotateTowardsPlayer();
+    }
 
+    private void RotateTowardsPlayer()
+    {
         xDiff = Mathf.RoundToInt(transform.position.x - player.transform.position.x);
         yDiff = Mathf.RoundToInt(transform.position.y - player.transform.position.y);
 
@@ -49,6 +51,7 @@ public class MonsterBasic : MonoBehaviour
             model.eulerAngles = new Vector3(0, 0, 90 - Mathf.Rad2Deg * Mathf.Atan(Mathf.Abs(yDiff * 1f / xDiff * 1f)));
         }
         model.position = new Vector2(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+
     }
 
     public void ReceiveDamage(int dmg)

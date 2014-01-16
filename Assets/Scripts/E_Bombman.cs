@@ -24,7 +24,7 @@ public class E_Bombman : MonsterBasic
 
         base.Awake();
 
-        base.currentHP = 40;
+        base.currentHP = 1;
     }
     // backup
     void OnLevelWasLoaded(int level)
