@@ -12,6 +12,13 @@ public class Player : MonoBehaviour
     private float fullAutomaticFireRate = 0.05f;
     private bool fullAutomaticFireReady = true;
 
+    private bool walking;
+    private bool canReceiveDamage = true;
+
+    // TODO create state mechanism....
+
+    // TODO blinking hero while !canReceiveDamage
+
     private static Player _singleton;
     private Player() { }
     public static Player Instance
@@ -96,7 +103,19 @@ public class Player : MonoBehaviour
 
     public void ReceiveDamage(int dmg)
     {
-        healthPointsCurrent -= dmg;
+        if (canReceiveDamage)
+        {
+            healthPointsCurrent -= dmg;
+            StartCoroutine(Invincible());
+        }
+    }
+
+    private IEnumerator Invincible()
+    {
+        canReceiveDamage = false;
+        yield return new WaitForSeconds(1.5f);
+        // TODO animation
+        canReceiveDamage = true;
     }
 
     Vector2 CheckMovement()
@@ -124,7 +143,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Walking = false;
+            walking = false;
             return Vector2.zero;
         }
     }
@@ -152,9 +171,9 @@ public class Player : MonoBehaviour
     {
         if (MovementDirection.x != 0)
         {
-            if (!Walking)
+            if (!walking)
             {
-                Walking = true;
+                walking = true;
                 //StartCoroutine(AnimateWalk());
             }
             if (MovementDirection.y == 0)
@@ -170,9 +189,9 @@ public class Player : MonoBehaviour
         {
             if (MovementDirection.y != 0)
             {
-                if (!Walking)
+                if (!walking)
                 {
-                    Walking = true;
+                    walking = true;
                     //StartCoroutine(AnimateWalk());
                 }
                 transform.Translate(new Vector3(0, MovementDirection.y * Time.deltaTime, 0));
@@ -184,14 +203,14 @@ public class Player : MonoBehaviour
         GUI.Label(new Rect(Screen.width - Screen.width * 0.1f, 0, 100, 100), "HP: " + healthPointsCurrent);
         // GUI.Label(new Rect(Screen.width - Screen.width * 0.1f, 20, 100, 100), "Armor: " + ArmorPointsCurrent);
     }
-    private bool Walking;
+   
     IEnumerator AnimateWalk()
     {
         int Counter1 = 0;
         int Counter2 = 0;
         model.renderer.material.mainTexture = walkAnimation;
         model.renderer.material.mainTextureScale = new Vector2(1f / (walkAnimation.width / 64f), 1f / (walkAnimation.height / 64f));
-        while (Walking)
+        while (walking)
         {
             model.renderer.material.mainTextureOffset = new Vector2(1f / (walkAnimation.width / 64f) * Counter1, 1f / (walkAnimation.height / 64f) * Counter2);
             if (Counter1 == (walkAnimation.width / 64) - 1)

@@ -7,6 +7,7 @@ public class E_Eye : MonsterBasic
     private int maxMovementSpeed = 140;
     private int shootingRange = 200;
     private float timeToTarget = 0.5f;//....
+    private bool isShooter;
 
     // Use this for initialization
     void Awake()
@@ -16,6 +17,8 @@ public class E_Eye : MonsterBasic
         base.player = Player.Instance;
         currentHP = 120; // 3hits
         base.animationTimer = 0.1f;
+
+        isShooter = (Random.Range(0f, 3f) >= 1.87f ? false : true); // coz why not?!
     }
 
     // Use this for initialization
@@ -42,7 +45,7 @@ public class E_Eye : MonsterBasic
 
 
             // shoot in range
-            if (base.IsInRangeOfPlayer(shootingRange))
+            if (base.IsInRangeOfPlayer(shootingRange) && isShooter)
             {
                 _Shoot();
             }
@@ -61,7 +64,7 @@ public class E_Eye : MonsterBasic
     private void _KineticArrive()
     {
         base.direction = base.player.transform.position - transform.position;
-        if (base.direction.magnitude < shootingRange) 
+        if (base.direction.magnitude < shootingRange && isShooter)
             base.velocity = Vector2.zero;
         else
         {
@@ -77,5 +80,22 @@ public class E_Eye : MonsterBasic
     private void _Shoot()
     {
         Debug.Log("PEW! PEW! PEW!");
+    }
+
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            player.ReceiveDamage(10);
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Player")
+        {
+            player.ReceiveDamage(10);
+        }
     }
 }

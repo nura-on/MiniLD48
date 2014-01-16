@@ -24,7 +24,7 @@ public class SpawnManager : MonoBehaviour
 
         enemyPrefabs = new List<GameObject>(2);
         _gm = Game.Instance;
-        //enemyPrefabs.Add(Resources.Load("Enemies/Bombman/Bombman") as GameObject);
+        enemyPrefabs.Add(Resources.Load("Enemies/Bombman/Bombman") as GameObject);
         enemyPrefabs.Add(Resources.Load("Enemies/Eye/Eye") as GameObject);
     }
 
