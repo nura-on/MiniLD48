@@ -121,6 +121,16 @@ Prefab:
       propertyPath: GUIStyle1.m_Normal.m_TextColor.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 47040f8f08a758542b4634f56d656c8a, type: 2}
+      propertyPath: guiStyle.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 22f410487fbe4d9499f6fdf9bfe56e9c,
+        type: 3}
+    - target: {fileID: 11400000, guid: 47040f8f08a758542b4634f56d656c8a, type: 2}
+      propertyPath: font
+      value: 
+      objectReference: {fileID: 12800000, guid: 22f410487fbe4d9499f6fdf9bfe56e9c,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47040f8f08a758542b4634f56d656c8a, type: 2}
   m_RootGameObject: {fileID: 975850430}
@@ -279,7 +289,7 @@ MonoBehaviour:
       m_Right: 0
       m_Top: 0
       m_Bottom: 0
-    m_Font: {fileID: 0}
+    m_Font: {fileID: 12800000, guid: 22f410487fbe4d9499f6fdf9bfe56e9c, type: 3}
     m_FontSize: 0
     m_FontStyle: 0
     m_Alignment: 0
@@ -293,6 +303,7 @@ MonoBehaviour:
     m_StretchWidth: 1
     m_StretchHeight: 0
   state: 0
+  font: {fileID: 12800000, guid: 22f410487fbe4d9499f6fdf9bfe56e9c, type: 3}
 --- !u!4 &975850432
 Transform:
   m_ObjectHideFlags: 0

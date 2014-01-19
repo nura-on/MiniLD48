@@ -38,6 +38,8 @@ public class Game : MonoBehaviour
     private static Game _singleton;
     private Object _block;
     private Object _winPattern;
+    private GUIStyle centeredStyle;
+    public Font font;
     public static Game Instance
     {
         get { return (_singleton == null ? new Game() : _singleton); }
@@ -66,11 +68,15 @@ public class Game : MonoBehaviour
 
     void OnGUI()
     {
+        centeredStyle = GUI.skin.GetStyle("Label");
+        centeredStyle.alignment = TextAnchor.MiddleCenter;
+        centeredStyle.font = font;
+        GUI.Label(new Rect(0, 0, 200, 100), "Wave: " + currentWave);
         if (Event.current.type == EventType.KeyDown && state == GameState.NotRunning)
         {
             Application.LoadLevel(1);
         }
-        GUI.Label(new Rect(Screen.width / 2, Screen.height / 2 - Screen.height * 0.2f, 0, 0), countDownText, guiStyle);
+        if (countDownText != "")GUI.Label(new Rect(Screen.width / 2 - 25, Screen.height / 2 - Screen.height * 0.2f, 200, 100), countDownText, guiStyle);
     }
 
     void OnLevelWasLoaded(int level)
@@ -87,17 +93,17 @@ public class Game : MonoBehaviour
     IEnumerator StartWaveCountDown()
     {
         //countDownText = "<color=white><size=50>NEW WAVE</size></color>";
-        //yield return new WaitForSeconds(1.5f);
-        //countDownText = "<color=white><size=50>3</size></color>";
-        //yield return new WaitForSeconds(1f);
-        //countDownText = "<color=white><size=50>2</size></color>";
-        //yield return new WaitForSeconds(1f);
-        //countDownText = "<color=white><size=50>1</size></color>";
-        //yield return new WaitForSeconds(1f);
-        //countDownText = "<color=white><size=50>GO!</size></color>";
-        //yield return new WaitForSeconds(1f);
-        //countDownText = "";
-        yield return null;
+        yield return new WaitForSeconds(1.5f);
+        countDownText = "<color=white><size=50>3</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "<color=white><size=50>2</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "<color=white><size=50>1</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "<color=white><size=50>GO!</size></color>";
+        yield return new WaitForSeconds(1f);
+        countDownText = "";
+        //yield return null;
         state = GameState.InWave;
     }
 
