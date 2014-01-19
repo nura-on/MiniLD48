@@ -109,7 +109,7 @@ public class Game : MonoBehaviour
 
     IEnumerator DisplayPatterForXSeconds(float sec)
     {
-        //TriggerWinPattern(true, 1, 1);
+        TriggerWinPattern(true, 1, 1);
         yield return new WaitForSeconds(sec);
         TriggerWinPattern(false, 1, 1);
     }
