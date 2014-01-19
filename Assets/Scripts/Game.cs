@@ -71,7 +71,7 @@ public class Game : MonoBehaviour
         centeredStyle = GUI.skin.GetStyle("Label");
         centeredStyle.alignment = TextAnchor.MiddleCenter;
         centeredStyle.font = font;
-        GUI.Label(new Rect(0, 0, 200, 100), "Wave: " + currentWave);
+        if(state != GameState.NotRunning) GUI.Label(new Rect(0, 0, 200, 100), "Wave: " + currentWave);
         if (Event.current.type == EventType.KeyDown && state == GameState.NotRunning)
         {
             Application.LoadLevel(1);

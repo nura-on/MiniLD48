@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     private bool visible = true;
     private GUIStyle centeredStyle;
     public Font font;
+    public AudioClip hurtSound, shootSound;
 
     public static Player Instance
     {
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour
 
                 if (fullAutomaticFireReady)
                 {
+                    audio.PlayOneShot(shootSound);
                     bullet = Instantiate(projectile, new Vector3(spawnPoint.position.x, spawnPoint.position.y, spawnPoint.position.z + 5), spawnPoint.rotation) as GameObject;
                     bullet.transform.Rotate(bullet.transform.rotation.x, bullet.transform.rotation.y, UnityEngine.Random.Range(-10f, 10f) + bullet.transform.rotation.z);
                     StartCoroutine(SetCooldownFullAutomaticFire());
@@ -120,6 +122,7 @@ public class Player : MonoBehaviour
     {
         if (canReceiveDamage)
         {
+            audio.PlayOneShot(hurtSound);
             healthPointsCurrent -= dmg;
             StartCoroutine(Invincible());
         }
@@ -225,7 +228,6 @@ public class Player : MonoBehaviour
                 once = false;
                 StartCoroutine(Timer());
             }
-            Time.timeScale = 1f;
             centeredStyle = GUI.skin.GetStyle("Label");
             centeredStyle.alignment = TextAnchor.UpperCenter;
             centeredStyle.font = font;

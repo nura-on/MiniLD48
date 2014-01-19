@@ -5,6 +5,8 @@ public class HitEnemy : MonoBehaviour
     public float WaitForFrameTime = 0.1f;
     public float TileWidth = 16;
     Transform model;
+    private bool once = true;
+    public AudioClip explosiveSound;
 
     void Awake()
     {
@@ -16,7 +18,10 @@ public class HitEnemy : MonoBehaviour
     }
     IEnumerator AnimateEffect()
     {
-
+        if (once) {
+            once = !once;
+            audio.PlayOneShot(explosiveSound);
+        }
         int Counter1 = 0;
         while (Counter1 < (model.renderer.material.mainTexture.width / TileWidth) - 1)
         {

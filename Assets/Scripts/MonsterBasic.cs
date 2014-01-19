@@ -3,6 +3,7 @@ using System.Collections;
 public class MonsterBasic : MonoBehaviour
 {
     public enum State { Spawn, Alive, Dead }
+    public AudioClip hitSound;
 
     protected State state;
     public int currentHP = 100;
@@ -66,6 +67,7 @@ public class MonsterBasic : MonoBehaviour
 
     public void ReceiveDamage(int dmg)
     {
+        audio.PlayOneShot(hitSound);
         currentHP -= dmg;
         if (CheckIfDead())
         {

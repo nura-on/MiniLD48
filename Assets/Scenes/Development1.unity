@@ -407,6 +407,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 150
+  state: 0
+  font: {fileID: 12800000, guid: 22f410487fbe4d9499f6fdf9bfe56e9c, type: 3}
+  hurtSound: {fileID: 8300000, guid: 1712b9d92a8aae64ab2a20627f723f25, type: 3}
+  shootSound: {fileID: 8300000, guid: e1a9a0dd1fe74c24caa5504a57a715c0, type: 3}
 --- !u!4 &1266538668
 Transform:
   m_ObjectHideFlags: 0
@@ -529,6 +533,14 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: c1a1521006a7bea42abf1d857e330520, type: 2}
+      propertyPath: hurtSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1712b9d92a8aae64ab2a20627f723f25, type: 3}
+    - target: {fileID: 11400000, guid: c1a1521006a7bea42abf1d857e330520, type: 2}
+      propertyPath: shootSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e1a9a0dd1fe74c24caa5504a57a715c0, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c1a1521006a7bea42abf1d857e330520, type: 2}
   m_RootGameObject: {fileID: 1266538666}
