@@ -10,6 +10,7 @@ public class E_Bombman : MonsterBasic
     public int distanceToBurst = 32;
     private GameObject _blood, _explo, _crater;
     public int explosionDamage = 40;
+    private GameObject _craterObj;
 
     void Awake()
     {
@@ -76,7 +77,8 @@ public class E_Bombman : MonsterBasic
         base.player.ReceiveDamage(20);
         Instantiate(_explo, transform.position, Quaternion.identity);
         Instantiate(_blood, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Quaternion.identity);
-        Instantiate(_crater, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity);
+        _craterObj = Instantiate(_crater, new Vector3(transform.position.x, transform.position.y, -3), Quaternion.identity) as GameObject;
+        _craterObj.transform.Rotate(_craterObj.transform.rotation.x, _craterObj.transform.rotation.y, UnityEngine.Random.Range(0f, 360f) + _craterObj.transform.rotation.z);
         state = State.Dead;
     }
 

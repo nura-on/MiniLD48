@@ -46,6 +46,8 @@ public class Game : MonoBehaviour
 
     void Awake()
     {
+        Time.timeScale = 1.5f;
+
         _singleton = this;
         _block = Resources.Load("WinPatternBlock") as GameObject;
         _winPattern = Resources.Load("WinPatternPositionBlinker") as GameObject;
@@ -59,14 +61,15 @@ public class Game : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Application.LoadLevel(1);
-        }
+        
     }
 
     void OnGUI()
     {
+        if (Event.current.type == EventType.KeyDown && state == GameState.NotRunning)
+        {
+            Application.LoadLevel(1);
+        }
         GUI.Label(new Rect(Screen.width / 2, Screen.height / 2 - Screen.height * 0.2f, 0, 0), countDownText, guiStyle);
     }
 

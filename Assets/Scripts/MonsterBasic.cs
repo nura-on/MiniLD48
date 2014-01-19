@@ -34,6 +34,9 @@ public class MonsterBasic : MonoBehaviour
     protected void Update()
     {
         RotateTowardsPlayer();
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, -5f);
+        model.transform.localPosition = new Vector3(model.transform.localPosition.x, model.transform.localPosition.y, -5f);
     }
 
     private void RotateTowardsPlayer()

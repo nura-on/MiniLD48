@@ -41,7 +41,7 @@ public class SpawnManager : MonoBehaviour
             {
                 // TODO random enemy
                 // TODO depending on wave
-                enemies.Add(Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], spawnPoints[Random.Range(0, 8)].transform.position, Quaternion.Euler(Vector3.zero)) as GameObject);
+                enemies.Add(Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], (Vector2)spawnPoints[Random.Range(0, 8)].transform.position, Quaternion.Euler(Vector3.zero)) as GameObject);
             }
             yield return new WaitForSeconds(Random.Range(_spawnFrequency - 0.5f, _spawnFrequency));
         }

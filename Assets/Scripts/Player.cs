@@ -4,7 +4,8 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     public int movementSpeed = 150;
-    private GameObject spawnPoint, projectile, bomb, model;
+    private GameObject projectile, bomb, model, bullet;
+    Transform spawnPoint;
     private int healthPointsCurrent = 100;
     //private int ArmorPointsCurrent = 0;
     private Texture2D walkAnimation;
@@ -20,7 +21,17 @@ public class Player : MonoBehaviour
     // TODO blinking hero while !canReceiveDamage
 
     private static Player _singleton;
+    private float _z_spray;
+    private Vector3 eulerAngles;
     private Player() { }
+
+    public enum PlayerState { Dead, Alive };
+    public PlayerState state;
+    private bool once;
+    private bool visible = true;
+    private GUIStyle centeredStyle;
+    public Font font;
+
     public static Player Instance
     {
         get
@@ -39,8 +50,10 @@ public class Player : MonoBehaviour
 
         bomb = Resources.Load("Bomb") as GameObject;
         model = transform.FindChild("Model").gameObject;
-        spawnPoint = model.transform.FindChild("Spawnpoint1").gameObject;
+        spawnPoint = model.transform.FindChild("Spawnpoint1").gameObject.transform;
         playerCamera = Camera.main;
+
+        state = PlayerState.Alive;
     }
     void Update()
     {
@@ -60,14 +73,15 @@ public class Player : MonoBehaviour
 
                 if (fullAutomaticFireReady)
                 {
-                    Instantiate(projectile, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    bullet = Instantiate(projectile, new Vector3(spawnPoint.position.x, spawnPoint.position.y, spawnPoint.position.z + 5), spawnPoint.rotation) as GameObject;
+                    bullet.transform.Rotate(bullet.transform.rotation.x, bullet.transform.rotation.y, UnityEngine.Random.Range(-10f, 10f) + bullet.transform.rotation.z);
                     StartCoroutine(SetCooldownFullAutomaticFire());
                 }
             }
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Instantiate(bomb, spawnPoint.transform.position, spawnPoint.transform.rotation);
-            }
+            //if (Input.GetKeyDown(KeyCode.F))
+            //{
+            //    Instantiate(bomb, spawnPoint.position, spawnPoint.rotation);
+            //}
         }
         FitModelToPixel();
         FitCameraToPixel();
@@ -97,6 +111,7 @@ public class Player : MonoBehaviour
         else
         {
             Game.Instance.state = Game.GameState.NotRunning;
+            state = PlayerState.Dead;
             return false;
         }
     }
@@ -200,10 +215,46 @@ public class Player : MonoBehaviour
     }
     void OnGUI()
     {
-        GUI.Label(new Rect(Screen.width - Screen.width * 0.1f, 0, 100, 100), "HP: " + healthPointsCurrent);
+
         // GUI.Label(new Rect(Screen.width - Screen.width * 0.1f, 20, 100, 100), "Armor: " + ArmorPointsCurrent);
+
+        if (state == PlayerState.Dead)
+        {
+            if (once)
+            {
+                once = false;
+                StartCoroutine(Timer());
+            }
+            Time.timeScale = 1f;
+            centeredStyle = GUI.skin.GetStyle("Label");
+            centeredStyle.alignment = TextAnchor.UpperCenter;
+            centeredStyle.font = font;
+            if (visible) GUI.Label(new Rect((Screen.width / 2) - 400, Screen.height / 2 + 50, 800, 500), "<color=white><size=15>Press any key to restart the game</size></color>", centeredStyle);
+            GUI.Label(new Rect((Screen.width / 2) - 400, Screen.height / 2 - 160, 800, 500), "<color=red><size=40>YOU DIED!</size></color>", centeredStyle);
+        }
+        else
+        {
+            GUI.Label(new Rect(312, 0, 200, 100), "HP: " + healthPointsCurrent);
+        }
     }
-   
+
+    private IEnumerator Timer()
+    {
+        while (true)
+        {
+            if (visible)
+            {
+                yield return new WaitForSeconds(1.2f);
+                visible = false;
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.2f);
+                visible = true;
+            }
+        }
+    }
+
     IEnumerator AnimateWalk()
     {
         int Counter1 = 0;

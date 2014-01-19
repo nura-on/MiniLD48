@@ -76,7 +76,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .0416666679, y: .302083343, z: 0}
+  m_LocalPosition: {x: .109457657, y: .214564011, z: 0}
   m_LocalScale: {x: .958333373, y: .958333373, z: 1}
   m_Children: []
   m_Father: {fileID: 400006}
@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 768, y: 600, z: -2000}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 96, y: 96, z: 1}
+  m_LocalScale: {x: 48, y: 48, z: 1}
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 400004}
@@ -136,7 +136,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 135
+  orthographic size: 320
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -197,8 +197,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: 10
-  m_Center: {x: 0, y: 2}
+  m_Radius: 17
+  m_Center: {x: -1.13, y: -3.28999996}
 --- !u!81 &8100000
 AudioListener:
   m_ObjectHideFlags: 1
@@ -225,6 +225,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 150
+  state: 0
+  font: {fileID: 12800000, guid: 22f410487fbe4d9499f6fdf9bfe56e9c, type: 3}
 --- !u!124 &12400000
 Behaviour:
   m_ObjectHideFlags: 1
